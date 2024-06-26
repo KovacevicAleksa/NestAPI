@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   Body,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -24,13 +25,21 @@ export class UsersController {
   //GET /users/:id -> {}
   @Get(':id')
   getOneUsers(@Param('id') id: string) {
-    return this.usersService.getUser(+id);
+    try {
+      return this.usersService.getUser(+id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
   //Post /users -> {}
   @Post('')
   createUsers(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+    try {
+      return this.usersService.createUser(createUserDto);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
   //Put /users/:id -> {}
@@ -47,7 +56,11 @@ export class UsersController {
 
   //Delete /users/:id -> {}
   @Delete(':id')
-  removeUsers() {
-    return {};
+  removeUsers(@Param('id') id: string) {
+    try {
+      return this.usersService.removeUser(+id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 }
