@@ -2,46 +2,41 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
+  Put,
   Param,
   Query,
   Body,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
   //GET /users?level=vip -> [ ... , ...]
+  constructor(private readonly usersService: UsersService) {}
   @Get()
-  getUsers(@Query('level') level: 'premium' | 'vip') {
-    const service = new UsersService();
-    return service.getUsers(level);
+  getUsers(@Query('level') level?: 'premium' | 'vip') {
+    return this.usersService.getUsers(level);
   }
+
   //GET /users/:id -> {}
   @Get(':id')
   getOneUsers(@Param('id') id: string) {
-    return {
-      id,
-    };
+    return this.usersService.getUser(+id);
   }
 
   //Post /users -> {}
   @Post('')
   createUsers(@Body() createUserDto: CreateUserDto) {
-    return {
-      name: createUserDto.name,
-    };
+    return this.usersService.createUser(createUserDto);
   }
 
   //Put /users/:id -> {}
   @Put(':id')
   updateUsers(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return {
-      id,
-      name: updateUserDto.name,
-    };
+    return this.usersService.updateUser(+id, updateUserDto);
   }
 
   //   //Patch /users/:id -> {}
