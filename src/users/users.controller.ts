@@ -10,10 +10,12 @@ import {
   NotFoundException,
   ParseIntPipe,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AdminGuard } from 'src/admin/admin.guard';
 
 @Controller('users')
 export class UsersController {
@@ -35,6 +37,7 @@ export class UsersController {
   }
 
   //Post /users -> {}
+  @UseGuards(AdminGuard)
   @Post('')
   createUsers(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     try {
