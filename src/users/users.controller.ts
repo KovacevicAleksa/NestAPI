@@ -8,6 +8,8 @@ import {
   Query,
   Body,
   NotFoundException,
+  ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -24,9 +26,9 @@ export class UsersController {
 
   //GET /users/:id -> {}
   @Get(':id')
-  getOneUsers(@Param('id') id: string) {
+  getOneUsers(@Param('id', ParseIntPipe) id: number) {
     try {
-      return this.usersService.getUser(+id);
+      return this.usersService.getUser(id);
     } catch (error) {
       throw new NotFoundException();
     }
@@ -34,7 +36,7 @@ export class UsersController {
 
   //Post /users -> {}
   @Post('')
-  createUsers(@Body() createUserDto: CreateUserDto) {
+  createUsers(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     try {
       return this.usersService.createUser(createUserDto);
     } catch (error) {
@@ -44,8 +46,11 @@ export class UsersController {
 
   //Put /users/:id -> {}
   @Put(':id')
-  updateUsers(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(+id, updateUserDto);
+  updateUsers(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   //   //Patch /users/:id -> {}
@@ -56,9 +61,9 @@ export class UsersController {
 
   //Delete /users/:id -> {}
   @Delete(':id')
-  removeUsers(@Param('id') id: string) {
+  removeUsers(@Param('id', ParseIntPipe) id: number) {
     try {
-      return this.usersService.removeUser(+id);
+      return this.usersService.removeUser(id);
     } catch (error) {
       throw new NotFoundException();
     }
