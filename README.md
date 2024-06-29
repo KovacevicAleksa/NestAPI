@@ -85,3 +85,6 @@ kubectl apply -f express-api-deployment.yaml
 kubectl apply -f express-api-service.yaml
 kubectl apply -f express-nginx-deployment.yaml
 kubectl apply -f express-nginx-service.yaml
+
+http://127.0.0.1:3000 nginx
+docker-compose up --build
