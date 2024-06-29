@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-nginx
+  labels:
+    app: express-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: express-nginx
+  template:
+    metadata:
+      labels:
+        app: express-nginx
+    spec:
+      containers:
+        - name: express-nginx
+          image: kovacevicaleksa/express-nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '200m'
